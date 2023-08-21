@@ -58,7 +58,7 @@ const calculatePosition = (
   return position;
 };
 
-// this is the final mapping from LED index to linear position along the worm
+// this is the mapping from LED index to linear position along the worm
 const ledIndexToPosition: number[] = [];
 
 ledRuns.forEach((ledRun, runIndex) => {
@@ -98,6 +98,13 @@ ledRuns.forEach((ledRun, runIndex) => {
   }
 });
 
-const outputFileName = "ledMapping.json";
-saveJson(outputFileName, ledIndexToPosition);
-console.log(ledIndexToPosition.length);
+// keep this in sync with art-cart.ino
+const NUM_VIRTUAL_LEDS = 100;
+
+// this is the mapping from LED index to virtual LED index
+const ledIndexToVirtualLedIndex = ledIndexToPosition.map((position) =>
+  Math.round(NUM_VIRTUAL_LEDS * position),
+);
+
+const outputFileName = "ledIndexToVirtualLedIndex.json";
+saveJson(outputFileName, ledIndexToVirtualLedIndex);
