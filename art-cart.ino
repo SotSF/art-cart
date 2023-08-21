@@ -38,7 +38,7 @@ void setup()
 
     // tell FastLED about the LED strip configuration
     // FastLED.addLeds<LED_TYPE, DATA_PIN, COLOR_ORDER>(leds, NUM_LEDS).setCorrection(TypicalLEDStrip);
-    FastLED.addLeds<LED_TYPE, DATA_PIN, CLK_PIN, COLOR_ORDER>(virtualLeds, NUM_VIRTUAL_LEDS).setCorrection(TypicalLEDStrip);
+    FastLED.addLeds<LED_TYPE, DATA_PIN, CLK_PIN, COLOR_ORDER>(leds, NUM_LEDS).setCorrection(TypicalLEDStrip);
 
     // set master brightness control
     FastLED.setBrightness(BRIGHTNESS);
@@ -53,7 +53,7 @@ uint8_t gHue = 0;                  // rotating "base color" used by many of the 
 
 void loop()
 {
-    // Call the current pattern function once, updating the 'leds' array
+    // Call the current pattern function once, updating the 'virtualLeds' array
     gPatterns[gCurrentPatternNumber]();
 
     updateLedsFromVirtualLeds();
