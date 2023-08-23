@@ -20,6 +20,10 @@ FASTLED_USING_NAMESPACE
 #define LED_TYPE WS2801
 #define COLOR_ORDER GRB
 
+#define DATA_PIN_TEETH 26
+#define LED_TYPE_TEETH WS2811
+#define COLOR_ORDER_TEETH RGB
+
 #define BRIGHTNESS 96
 #define FRAMES_PER_SECOND 120
 
@@ -27,7 +31,9 @@ FASTLED_USING_NAMESPACE
 CRGB virtualLeds[NUM_VIRTUAL_LEDS];
 
 #define NUM_LEDS 374
+#define NUM_LEDS_TEETH 150
 CRGB leds[NUM_LEDS];
+CRGB leds_teeth[NUM_LEDS_TEETH];
 
 // generated with generateLedMapping.ts, copied from ledIndexToVirtualLedIndex.json
 int ledIndexToVirtualLedIndex[NUM_LEDS] = {0, 4, 8, 13, 17, 21, 25, 31, 38, 44, 50, 55, 60, 65, 70, 75, 79, 83, 88, 92, 96, 96, 96, 93, 89, 86, 82, 79, 75, 70, 65, 60, 55, 50, 44, 38, 31, 25, 21, 17, 13, 8, 4, 0, 0, 0, 4, 8, 13, 17, 21, 25, 30, 35, 40, 45, 50, 56, 63, 69, 75, 79, 82, 86, 89, 93, 96, 96, 97, 94, 91, 88, 84, 81, 78, 75, 70, 65, 60, 55, 50, 45, 40, 35, 30, 25, 20, 15, 10, 5, 0, 0, 0, 0, 4, 8, 13, 17, 21, 25, 30, 35, 40, 45, 50, 56, 63, 69, 69, 69, 63, 56, 50, 47, 44, 41, 38, 34, 31, 28, 25, 20, 15, 10, 5, 0, 0, 0, 0, 5, 10, 15, 20, 25, 28, 31, 33, 36, 39, 42, 44, 47, 50, 55, 60, 65, 70, 70, 65, 60, 55, 50, 47, 44, 42, 39, 36, 33, 31, 28, 25, 20, 15, 10, 5, 0, 0, 0, 4, 8, 13, 17, 21, 25, 28, 31, 33, 36, 39, 42, 44, 47, 50, 55, 60, 65, 70, 70, 70, 65, 60, 55, 50, 47, 44, 41, 38, 34, 31, 28, 25, 20, 15, 10, 5, 0, 0, 0, 6, 13, 19, 25, 28, 31, 33, 36, 39, 42, 44, 47, 50, 55, 60, 65, 70, 70, 65, 60, 55, 50, 47, 44, 42, 39, 36, 33, 31, 28, 25, 20, 15, 10, 5, 0, 0, 0, 5, 10, 15, 20, 25, 28, 31, 33, 36, 39, 42, 44, 47, 50, 56, 63, 69, 69, 69, 63, 56, 50, 46, 43, 39, 36, 32, 29, 25, 20, 15, 10, 5, 0, 0, 0, 0, 5, 10, 15, 20, 25, 29, 32, 36, 39, 43, 46, 50, 56, 63, 69, 75, 79, 82, 86, 89, 93, 96, 96, 96, 93, 89, 86, 82, 79, 75, 70, 65, 60, 55, 50, 45, 40, 35, 30, 25, 20, 15, 10, 5, 0, 0, 0, 5, 10, 15, 20, 25, 30, 35, 40, 45, 50, 55, 60, 65, 70, 75, 79, 83, 88, 92, 96, 96, 93, 89, 86, 82, 79, 75, 70, 65, 60, 55, 50, 44, 38, 31, 25, 21, 17, 13, 8, 4, 0, 0, 0};
@@ -37,7 +43,7 @@ void setup()
     delay(3000); // 3 second delay for recovery
 
     // tell FastLED about the LED strip configuration
-    // FastLED.addLeds<LED_TYPE, DATA_PIN, COLOR_ORDER>(leds, NUM_LEDS).setCorrection(TypicalLEDStrip);
+    FastLED.addLeds<LED_TYPE_TEETH, DATA_PIN_TEETH, COLOR_ORDER_TEETH>(leds_teeth, NUM_LEDS_TEETH).setCorrection(TypicalLEDStrip);
     FastLED.addLeds<LED_TYPE, DATA_PIN, CLK_PIN, COLOR_ORDER>(leds, NUM_LEDS).setCorrection(TypicalLEDStrip);
 
     // set master brightness control
@@ -57,6 +63,9 @@ void loop()
     gPatterns[gCurrentPatternNumber]();
 
     updateLedsFromVirtualLeds();
+
+    // Set all the teeth LEDs to the global hue
+    fill_solid(leds_teeth, NUM_LEDS_TEETH, virtualLeds[0]);
 
     // send the 'leds' array out to the actual LED strip
     FastLED.show();
