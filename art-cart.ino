@@ -52,7 +52,7 @@ void setup()
 
 // List of patterns to cycle through.  Each is defined as a separate function below.
 typedef void (*SimplePatternList[])();
-SimplePatternList gPatterns = {rainbow, rainbowWithGlitter, confetti, sinelon, juggle, bpm};
+SimplePatternList gPatterns = {confetti, sinelon, juggle, bpm};
 
 uint8_t gCurrentPatternNumber = 0; // Index number of which pattern is current
 uint8_t gHue = 0;                  // rotating "base color" used by many of the patterns
@@ -74,7 +74,7 @@ void loop()
 
     // do some periodic updates
     EVERY_N_MILLISECONDS(20) { gHue++; }   // slowly cycle the "base color" through the rainbow
-    EVERY_N_SECONDS(10) { nextPattern(); } // change patterns periodically
+    EVERY_N_SECONDS(15) { nextPattern(); } // change patterns periodically
 }
 
 void updateLedsFromVirtualLeds()
